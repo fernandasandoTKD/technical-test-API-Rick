@@ -1,1 +1,0 @@
-# technical-test-API-Rick
