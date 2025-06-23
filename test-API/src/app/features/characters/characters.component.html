@@ -1,6 +1,13 @@
 <div class="p-6">
   <h2 class="text-2xl font-bold mb-6">Listado de Personajes</h2>
 
+
+  <!-- Favorito actual -->
+<div *ngIf="favoriteCharacter" class="mb-4 p-4 bg-pink-100 rounded shadow text-pink-800">
+  💖 Favorito actual: {{ favoriteCharacter.name }} - Estado: {{favoriteCharacter.status}} -  Especie:{{favoriteCharacter.species}}
+</div>
+
+
   <!-- Filtros -->
   <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
 
@@ -26,6 +33,7 @@
     </button>
 
   </div>
+
 
   <!-- Tabla -->
   <div class="overflow-auto rounded shadow border border-gray-300">
@@ -71,9 +79,15 @@
 
       <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef> Acciones </th>
-        <td mat-cell *matCellDef="let element"> <button mat-fab >
-            <mat-icon>favorite</mat-icon>
-          </button>
+        <td mat-cell *matCellDef="let element"> <button mat-icon-button color="warn" (click)="setFavorite(element)">
+      <mat-icon>
+        {{
+          favoriteCharacter?.id === element.id
+            ? 'favorite'
+            : 'favorite_border'
+        }}
+      </mat-icon>
+    </button>
 
           <button mat-fab>
             <mat-icon>info</mat-icon>
@@ -90,4 +104,21 @@
 
   <mat-paginator [pageSize]="10" [pageSizeOptions]="[10, 20, 50]" showFirstLastButtons class="mt-4">
   </mat-paginator>
+
+  <!-- Totales por tipo y especie-->
+  <h2 class="text-lg font-bold mt-10 mb-4">Totales por Especie</h2>
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+    <mat-card *ngFor="let item of totalBySpecies" class="p-4">
+      <h3 class="text-md font-semibold">{{ item.species }}</h3>
+      <p>{{ item.count }} personaje(s)</p>
+    </mat-card>
+  </div>
+
+  <h2 class="text-lg font-bold mt-10 mb-4">Totales por Tipo</h2>
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+    <mat-card *ngFor="let item of totalByType" class="p-4">
+      <h3 class="text-md font-semibold">{{ item.type }}</h3>
+      <p>{{ item.count }} personaje(s)</p>
+    </mat-card>
+  </div>
 </div>
