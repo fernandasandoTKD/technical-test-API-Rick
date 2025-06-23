@@ -1,12 +1,22 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
+import {MatCardModule} from '@angular/material/card';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, MatCardModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-  title = 'test-API';
+    pageTitle: string = '';
+  constructor(private router: Router, private activatedRoute: ActivatedRoute){}
+  ngOnInit(): void {
+    this.router.events.subscribe(() => {
+      const routeData = this.activatedRoute.firstChild?.snapshot.data;
+      if (routeData && routeData['title']) {
+        this.pageTitle = routeData['title'];
+      }
+    });
+  }
 }
