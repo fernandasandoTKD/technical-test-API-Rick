@@ -3,9 +3,10 @@
 
 
   <!-- Favorito actual -->
-<div *ngIf="favoriteCharacter" class="mb-4 p-4 bg-pink-100 rounded shadow text-pink-800">
-  💖 Favorito actual: {{ favoriteCharacter.name }} - Estado: {{favoriteCharacter.status}} -  Especie:{{favoriteCharacter.species}}
-</div>
+  <div *ngIf="favoriteCharacter" class="mb-4 p-4 bg-pink-100 rounded shadow text-pink-800">
+    💖 Favorito actual: {{ favoriteCharacter.name }} - Estado: {{favoriteCharacter.status}} -
+    Especie:{{favoriteCharacter.species}}
+  </div>
 
 
   <!-- Filtros -->
@@ -21,9 +22,11 @@
       <mat-label>Filtrar por estado</mat-label>
       <mat-select [formControl]="statusControl">
         <mat-option value="">Todos</mat-option>
-        <mat-option *ngFor="let status of statuses" [value]="status">
+       @for (status of statuses; track status) {
+         <mat-option  [value]="status">
           {{ status | titlecase }}
         </mat-option>
+       }
       </mat-select>
     </mat-form-field>
 
@@ -80,16 +83,16 @@
       <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef> Acciones </th>
         <td mat-cell *matCellDef="let element"> <button mat-icon-button color="warn" (click)="setFavorite(element)">
-      <mat-icon>
-        {{
-          favoriteCharacter?.id === element.id
-            ? 'favorite'
-            : 'favorite_border'
-        }}
-      </mat-icon>
-    </button>
-
-          <button mat-fab>
+            <mat-icon>
+              {{
+              favoriteCharacter?.id === element.id
+              ? 'favorite'
+              : 'favorite_border'
+              }}
+            </mat-icon>
+          </button>
+          <button mat-icon-button color="primary" [routerLink]="['/characters', element.id]"
+            matTooltip="Ver detalles">
             <mat-icon>info</mat-icon>
           </button>
         </td>
@@ -108,17 +111,21 @@
   <!-- Totales por tipo y especie-->
   <h2 class="text-lg font-bold mt-10 mb-4">Totales por Especie</h2>
   <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-    <mat-card *ngFor="let item of totalBySpecies" class="p-4">
+    @for (item of totalBySpecies; track item) {
+      <mat-card  class="p-4">
       <h3 class="text-md font-semibold">{{ item.species }}</h3>
       <p>{{ item.count }} personaje(s)</p>
     </mat-card>
+    }
   </div>
 
   <h2 class="text-lg font-bold mt-10 mb-4">Totales por Tipo</h2>
   <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-    <mat-card *ngFor="let item of totalByType" class="p-4">
+    @for (item of totalByType; track item) {
+      <mat-card class="p-4">
       <h3 class="text-md font-semibold">{{ item.type }}</h3>
       <p>{{ item.count }} personaje(s)</p>
     </mat-card>
+    }
   </div>
 </div>

@@ -1,0 +1,74 @@
+<div class="text-center  mb-4">
+  <h1 class="text-2xl font-bold pt-5">Detalle de personajes</h1>
+</div>
+
+<div class="flex justify-center">
+
+  @if(character){
+  <div class="flex flex-col h-auto bg-purple-800 text-white p-6 gap-6 rounded-2xl mx-3 my-5">
+
+    <div class="text-center">
+      <h1 class="text-xl font-bold">{{ character.name }}</h1>
+      <hr class="border-gray-500 my-4">
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-2 md:gap-4 text-xl">
+
+      <div class="flex justify-center">
+        <div class="w-48 h-48 max-w-full max-h-full">
+          <img [src]="character.image" [alt]="character.name" class="w-full h-full rounded-lg object-cover">
+        </div>
+      </div>
+
+      <div>
+        <p> <strong>ID:</strong> {{ character.id }}</p>
+        <p><strong>Especie:</strong> {{ character.species }}</p>
+        <h3 class="text-lg font-semibold">Localización actual:</h3>
+        <p>{{ character.location.name }}</p>
+        @if(locationResident){
+        <p>Residente: {{ locationResident.name }}</p>
+        }
+        @else {
+        <p>No tiene residentes</p>
+        }
+      </div>
+
+
+      <div>
+        <p> <strong>Estado:</strong> {{ character.status }}</p>
+        <p><strong>Género:</strong> {{ character.gender }}</p>
+        <h3 class="text-lg font-semibold">Origen:</h3>
+        <p>{{ character.origin.name }}</p>
+        @if(originResident){
+        <p>Residente: {{ originResident.name }}</p>
+        }
+        @else {
+        <p>No tiene residentes</p>
+        }
+
+      </div>
+
+      <div>
+        <p><strong>N° Episodios:</strong> {{ character.episode.length }}</p>
+        <p><strong>Creado:</strong> {{ character.created | date: 'yyyy-MM-dd' }}</p>
+        <p><strong>Tipo:</strong> {{ character.type || 'No encontrado'}}</p>
+        <h3 class="text-lg font-semibold">Episodio:</h3>
+        @if(episode){
+        <p>{{ episode.name }} ({{ episode.episode }})</p>
+        }
+
+        @else {<p>No tiene episodios</p>}
+      </div>
+    </div>
+
+    <hr class="border-gray-500">
+
+
+    <div class="flex justify-end">
+      <button class="bg-gray-950 hover:bg-gray-800 text-white font-bold py-2 px-4 rounded" mat-button type="button" (click)="navigateToList()">
+        Volver
+      </button>
+    </div>
+  </div>
+  }
+</div>

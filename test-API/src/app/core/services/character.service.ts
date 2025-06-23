@@ -8,9 +8,9 @@ import { forkJoin, map, mergeMap, of, switchMap } from 'rxjs';
 export class CharacterService {
   private apiUrl = 'https://rickandmortyapi.com/api/character';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
-   getAllCharacters(filters: any = {}) {
+  getAllCharacters(filters: any = {}) {
     return this.http.get<any>(this.apiUrl, { params: filters }).pipe(
       switchMap(first => {
         const pages = Array.from({ length: first.info.pages }, (_, i) =>
@@ -22,6 +22,15 @@ export class CharacterService {
       })
     );
   }
+
+  getCharacterById(id: number) {
+    return this.http.get<any>(`${this.apiUrl}/${id}`);
+  }
+
+  getByUrl(url: string) {
+    return this.http.get<any>(url);
+  }
+
 }
 
 

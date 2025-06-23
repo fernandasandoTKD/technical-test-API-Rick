@@ -9,10 +9,11 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { CharacterService } from '../../core/services/character.service';
 import { debounceTime } from 'rxjs';
-import { MatButton } from '@angular/material/button';
+import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-characters',
@@ -25,15 +26,18 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
-    MatButton,
+    MatButtonModule,
     MatIconModule,
     MatCardModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    RouterModule
   ],
   templateUrl: './characters.component.html',
   styleUrls: ['./characters.component.css']
 })
 export class CharactersComponent implements OnInit {
+
+  //Inyección de dependencias
   private characterService = inject(CharacterService);
   private snackBar = inject(MatSnackBar);
 
@@ -52,6 +56,7 @@ export class CharactersComponent implements OnInit {
   totalBySpecies: { species: string; count: number }[] = [];
   totalByType: { type: string; count: number }[] = [];
 
+  //Persoanje favorito
   favoriteCharacter: any = null;
 
 
@@ -61,9 +66,15 @@ export class CharactersComponent implements OnInit {
   ngOnInit(): void {
     this.loadCharacters();
 
+
+    //Lógica reactiva de filtros
     this.nameControl.valueChanges.pipe(debounceTime(300)).subscribe(() => this.loadCharacters());
     this.statusControl.valueChanges.pipe(debounceTime(300)).subscribe(() => this.loadCharacters());
   }
+
+   /**
+   * Método que llama al servicio para traer los personajes filtrados
+   */
 
   loadCharacters(): void {
     this.characterService.getAllCharacters({
@@ -83,10 +94,18 @@ export class CharactersComponent implements OnInit {
 
   }
 
+
+   /**
+   * Método de limpiado de filtros
+   */
   clearFilters(): void {
     this.nameControl.setValue('');
     this.statusControl.setValue('');
   }
+
+   /**
+   * Método para el calculo dtotal de personajes
+   */
 
    calculateTotals(characters: any[]): void {
     const speciesMap = new Map<string, number>();
@@ -104,6 +123,12 @@ export class CharactersComponent implements OnInit {
     this.totalByType = Array.from(typeMap.entries()).map(([type, count]) => ({ type, count }));
   }
 
+
+   /**
+   * Método para desmarcar y marcar personjae favorito
+   * @param character personjae a marcar
+   */
+
 setFavorite(character: any): void {
   if (this.favoriteCharacter && this.favoriteCharacter.id === character.id) {
     this.favoriteCharacter = null;
@@ -113,15 +138,5 @@ setFavorite(character: any): void {
     this.snackBar.open('Personaje marcado como favorito', 'Cerrar', { duration: 3000 });
   }
 }
-
-showFavoriteDetails(): void {
-  alert(`
-    Nombre: ${this.favoriteCharacter.name}
-    Status: ${this.favoriteCharacter.status}
-    Especie: ${this.favoriteCharacter.species}
-    Género: ${this.favoriteCharacter.gender}
-  `);
-}
-
 
 }
